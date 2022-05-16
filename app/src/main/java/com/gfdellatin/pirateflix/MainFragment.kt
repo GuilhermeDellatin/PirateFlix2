@@ -37,25 +37,16 @@ class MainFragment : Fragment() {
     }
 
     private fun getMovies() {
-        ServiceProvider.service.getMovies(BuildConfig.tmdbToken)
-            .enqueue(object : Callback<BaseResponse<List<MovieResponse>>> {
-                override fun onResponse(
-                    call: Call<BaseResponse<List<MovieResponse>>>,
-                    response: Response<BaseResponse<List<MovieResponse>>>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()?.results
-                        movies.adapter = MoviesAdapter(data ?: emptyList())
-                    }
+        Thread {
+            val result = ServiceProvider.service.getMovies(BuildConfig.tmdbToken).execute()
+
+            if (result.isSuccessful) {
+                val data = result.body()?.results
+
+                requireActivity().runOnUiThread {
+                    movies.adapter = MoviesAdapter(data ?: emptyList())
                 }
-
-                override fun onFailure(
-                    call: Call<BaseResponse<List<MovieResponse>>>,
-                    t: Throwable
-                ) {
-
-                }
-
-            })
+            }
+        }.start()
     }
 }

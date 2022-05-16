@@ -1,7 +1,11 @@
 package com.gfdellatin.pirateflix.remote
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class MovieResponse(
-    val adult: Boolean,
+    @SerialName("adult") val adult: Boolean,
     val backdropPath: String,
     val genreIds: List<Int>,
     val id: Int,

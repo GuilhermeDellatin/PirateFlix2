@@ -13,6 +13,7 @@ import com.gfdellatin.pirateflix.remote.ServiceProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 
 class MainFragment : Fragment() {
 
@@ -38,12 +39,19 @@ class MainFragment : Fragment() {
     }
 
     private fun getMovies() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val value: BaseResponse<List<MovieResponse>> =
-                ServiceProvider.service.getMovies(BuildConfig.tmdbToken)
 
-            withContext(Dispatchers.Main) {
-                movies.adapter = MoviesAdapter(value.results)
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val value: BaseResponse<List<MovieResponse>> =
+                    ServiceProvider.service.getMovies(BuildConfig.tmdbToken)
+
+                withContext(Dispatchers.Main) {
+                    movies.adapter = MoviesAdapter(value.results)
+                }
+            } catch (exception: HttpException) {
+
+            } catch (exception: Exception) {
+
             }
         }
     }

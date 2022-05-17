@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.gfdellatin.pirateflix.remote.BaseResponse
 import com.gfdellatin.pirateflix.remote.MovieResponse
 import com.gfdellatin.pirateflix.remote.ServiceProvider
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainFragment : Fragment() {
 
@@ -37,16 +38,13 @@ class MainFragment : Fragment() {
     }
 
     private fun getMovies() {
-        Thread {
-            val result = ServiceProvider.service.getMovies(BuildConfig.tmdbToken).execute()
+        lifecycleScope.launch(Dispatchers.IO) {
+            val value: BaseResponse<List<MovieResponse>> =
+                ServiceProvider.service.getMovies(BuildConfig.tmdbToken)
 
-            if (result.isSuccessful) {
-                val data = result.body()?.results
-
-                requireActivity().runOnUiThread {
-                    movies.adapter = MoviesAdapter(data ?: emptyList())
-                }
+            withContext(Dispatchers.Main) {
+                movies.adapter = MoviesAdapter(value.results)
             }
-        }.start()
+        }
     }
 }

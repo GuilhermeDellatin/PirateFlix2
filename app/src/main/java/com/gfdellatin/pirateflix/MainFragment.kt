@@ -8,12 +8,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.gfdellatin.pirateflix.remote.BaseResponse
+import com.gfdellatin.pirateflix.remote.CustomError
 import com.gfdellatin.pirateflix.remote.MovieResponse
 import com.gfdellatin.pirateflix.remote.ServiceProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import retrofit2.HttpException
+import java.net.HttpURLConnection
 
 class MainFragment : Fragment() {
 
@@ -49,10 +53,22 @@ class MainFragment : Fragment() {
                     movies.adapter = MoviesAdapter(value.results)
                 }
             } catch (exception: HttpException) {
-
+                when (exception.code()) {
+                    HttpURLConnection.HTTP_BAD_REQUEST -> {}
+                    HttpURLConnection.HTTP_NOT_FOUND -> {}
+                    HttpURLConnection.HTTP_INTERNAL_ERROR -> {}
+                    else -> {}
+                }
+                val error = exception.getErrorResponse<CustomError>()
             } catch (exception: Exception) {
 
             }
         }
+    }
+}
+
+inline fun <reified ClassType> HttpException.getErrorResponse(): ClassType? {
+    return this.response()?.errorBody()?.string()?.let {
+        Json.decodeFromString(it)
     }
 }

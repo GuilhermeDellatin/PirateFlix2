@@ -1,7 +1,9 @@
-package com.gfdellatin.pirateflix
+package com.gfdellatin.pirateflix.presenter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.gfdellatin.pirateflix.MainFragment
+import com.gfdellatin.pirateflix.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

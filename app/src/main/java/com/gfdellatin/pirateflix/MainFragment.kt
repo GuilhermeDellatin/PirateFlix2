@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.gfdellatin.pirateflix.network.ServiceProvider
 import com.gfdellatin.pirateflix.remote.BaseResponse
 import com.gfdellatin.pirateflix.remote.CustomError
 import com.gfdellatin.pirateflix.remote.MovieResponse
-import com.gfdellatin.pirateflix.remote.ServiceProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,26 +44,6 @@ class MainFragment : Fragment() {
 
     private fun getMovies() {
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val value: BaseResponse<List<MovieResponse>> =
-                    ServiceProvider.service.getMovies(BuildConfig.tmdbToken)
-
-                withContext(Dispatchers.Main) {
-                    movies.adapter = MoviesAdapter(value.results)
-                }
-            } catch (exception: HttpException) {
-                when (exception.code()) {
-                    HttpURLConnection.HTTP_BAD_REQUEST -> {}
-                    HttpURLConnection.HTTP_NOT_FOUND -> {}
-                    HttpURLConnection.HTTP_INTERNAL_ERROR -> {}
-                    else -> {}
-                }
-                val error = exception.getErrorResponse<CustomError>()
-            } catch (exception: Exception) {
-
-            }
-        }
     }
 }
 

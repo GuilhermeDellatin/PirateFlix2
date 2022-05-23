@@ -1,18 +1,19 @@
-package com.gfdellatin.pirateflix
+package com.gfdellatin.pirateflix.presenter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import coil.load
 import androidx.recyclerview.widget.RecyclerView
-import com.gfdellatin.pirateflix.remote.MovieResponse
+import coil.load
+import com.gfdellatin.pirateflix.R
+import com.gfdellatin.pirateflix.presenter.model.MovieViewObject
 
 private const val basePosterUrl = "https://image.tmdb.org/t/p/w500/"
 
 class MoviesAdapter(
-    private val movies: List<MovieResponse>
+    private val movies: List<MovieViewObject>
 ) : RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -26,9 +27,9 @@ class MoviesAdapter(
         val movie = movies[position]
 
         holder.apply {
-            movieName.text = movie.title
+            movieName.text = movie.name
             poster.load(
-                basePosterUrl + movie.posterPath
+                basePosterUrl + movie.poster
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.gfdellatin.pirateflix.domain.model.use_case
+package com.gfdellatin.pirateflix.domain.use_case
 
 import com.gfdellatin.pirateflix.data.DiscoveryRepository
 import com.gfdellatin.pirateflix.domain.model.Movies

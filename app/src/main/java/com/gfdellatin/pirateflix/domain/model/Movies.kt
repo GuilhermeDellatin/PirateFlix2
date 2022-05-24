@@ -1,7 +1,5 @@
 package com.gfdellatin.pirateflix.domain.model
 
-import kotlinx.serialization.SerialName
-
 data class Movies(
     val adult: Boolean,
     val backdropPath: String,

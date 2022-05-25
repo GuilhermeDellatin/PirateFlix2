@@ -3,7 +3,9 @@ package com.gfdellatin.pirateflix.presenter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.gfdellatin.pirateflix.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
